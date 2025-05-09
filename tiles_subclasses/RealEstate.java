@@ -5,6 +5,6 @@ public class RealEstate extends Property {
     }
 
     public int getRent() {
-        
+        return super.getRent();
     }
 }

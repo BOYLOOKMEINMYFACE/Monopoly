@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Game {
 
     private Dice dice1;
@@ -25,11 +30,35 @@ public class Game {
     }
 
     public ArrayList<Tiles> initiateBoard() {
-        
+        ArrayList<Tiles> board = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/monopolyTiles.csv"))) {
+            String line;
+            boolean isFirstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue; // Skip the first line
+                }
+                String[] parts = line.split(",");
+                String name = parts[1].trim(); // Adjusted to use the correct column for the name
+                board.add(new Tiles(name));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load board from CSV file.");
+        }
         return board;
     }
 
     public Dice[] getDices() {
-        return new Dice[]{dice1, dice2};
+        return new Dice[] { dice1, dice2 };
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<Tiles> getBoard() {
+        return board;
     }
 }

@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+
 public class Utility extends Property {
+    // List to keep track of all utilities to calculate rent
     private static ArrayList<Utility> utilities = new ArrayList<Utility>();
 
     public Utility(String name, int cost) {

@@ -13,7 +13,7 @@ public class Property extends Tiles {
     public Property(String name, int cost) {
         super(name);
         this.cost = cost;
-        this.rent = null;
+        this.rent = 0; // Default rent to 0 if not specified
         this.owner = null; // No owner initially
     }
 
