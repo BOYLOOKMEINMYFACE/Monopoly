@@ -25,17 +25,7 @@ public class Game {
     }
 
     public ArrayList<Tiles> initiateBoard() {
-        try (BufferedReader br = new BufferedReader(new FileReader("board.csv"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-            String[] parts = line.split(",");
-            String name = parts[0];
-            int cost = Integer.parseInt(parts[1]);
-            board.add(new Tiles(name, cost));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
         return board;
     }
 

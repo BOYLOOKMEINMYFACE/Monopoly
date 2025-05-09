@@ -1,0 +1,41 @@
+Tile #,Space Name,Type,Class,Cost
+1,GO,Corner,Go,null
+2,Mediterranean Avenue,Property,RealEstate,60
+3,Community Chest,Card,CommunityChest,null
+4,Baltic Avenue,Property,RealEstate,60
+5,Income Tax,Tax,IncomeTax,null
+6,Reading Railroad,Property,Railroad,200
+7,Oriental Avenue,Property,RealEstate,100
+8,Chance,Card,Chances,null
+9,Vermont Avenue,Property,RealEstate,100
+10,Connecticut Avenue,Property,RealEstate,120
+11,Jail / Just Visiting,Corner,Corner,null
+12,St. Charles Place,Property,RealEstate,140
+13,Electric Company,Property,Utility,150
+14,States Avenue,Property,RealEstate,140
+15,Virginia Avenue,Property,RealEstate,160
+16,Pennsylvania Railroad,Property,Railroad,200
+17,St. James Place,Property,RealEstate,180
+18,Community Chest,Card,CommunityChest,null
+19,Tennessee Avenue,Property,RealEstate,180
+20,New York Avenue,Property,RealEstate,200
+21,Free Parking,Corner,Corner,null
+22,Kentucky Avenue,Property,RealEstate,220
+23,Chance,Card,Chances,null
+24,Indiana Avenue,Property,RealEstate,220
+25,Illinois Avenue,Property,RealEstate,240
+26,B&O Railroad,Property,Railroad,200
+27,Atlantic Avenue,Property,RealEstate,260
+28,Ventnor Avenue,Property,RealEstate,260
+29,Water Works,Property,Utility,150
+30,Marvin Gardens,Property,RealEstate,280
+31,Go to Jail,Corner,Corner,null
+32,Pacific Avenue,Property,RealEstate,300
+33,North Carolina Avenue,Property,RealEstate,300
+34,Community Chest,Card,CommunityChest,null
+35,Pennsylvania Avenue,Property,RealEstate,320
+36,Short Line,Property,Railroad,200
+37,Chance,Card,Chances,null
+38,Park Place,Property,RealEstate,350
+39,Luxury Tax,Tax,LuxuryTax,null
+40,Boardwalk,Property,RealEstate,400
