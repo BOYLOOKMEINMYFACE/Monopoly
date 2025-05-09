@@ -21,7 +21,7 @@ public class Game {
         this.dice1 = new Dice(6);
         this.dice2 = new Dice(6);
 
-        this.board = new ArrayList<>();
+        board = initiateBoard();
     }
 
     public ArrayList<Tiles> initiateBoard() {
