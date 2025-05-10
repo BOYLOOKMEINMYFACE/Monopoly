@@ -24,4 +24,20 @@ public class Player {
         }
     }
     
+    public void buyHouse(int cost) {
+        if (balance >= cost) {
+            balance -= cost; // Deduct the cost of building a house
+        } else {
+            System.out.println("Not enough balance to build a house.");
+        }
+    }
+
+    public void payRent(int rent) {
+        if (balance >= rent) {
+            balance -= rent; // Deduct the rent from the player's balance
+        } else {
+            System.out.println("Not enough balance to pay rent.");
+        }
+    }
+
 }

@@ -43,7 +43,8 @@ public class Game {
                 switch (type) {
                     case "RealEstate":
                         int[] rents = parseRents(parts, 4, 5);
-                        board.add(new RealEstate(name, cost, rents));
+                        // adding a dummy value for cost of house
+                        board.add(new RealEstate(name, cost, rents, 100));
                         break;
                     case "Railroad":
                         board.add(new Railroad(name, cost));
@@ -52,13 +53,16 @@ public class Game {
                         board.add(new Utility(name, cost));
                         break;
                     case "Chances":
-                        board.add(new Chances(name));
+                        board.add(new Chances());
                         break;
                     case "CommunityChest":
-                        board.add(new CommunityChest(name));
+                        board.add(new CommunityChest());
                         break;
-                    case "Tax":
-                        board.add(new Tax(name, taxAmount));
+                    case "LuxuryTax":
+                        board.add(new LuxuryTax());
+                        break;
+                    case "IncomeTax":
+                        board.add(new IncomeTax());
                         break;
                     case "Go":
                         board.add(new Go(name));
