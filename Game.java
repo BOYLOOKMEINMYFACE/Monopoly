@@ -33,21 +33,61 @@ public class Game {
         ArrayList<Tiles> board = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/monopolyTiles.csv"))) {
             String line;
-            boolean isFirstLine = true;
+            br.readLine(); // Skip the first line (header)
             while ((line = br.readLine()) != null) {
-                if (isFirstLine) {
-                    isFirstLine = false;
-                    continue; // Skip the first line
-                }
                 String[] parts = line.split(",");
-                String name = parts[1].trim(); // Adjusted to use the correct column for the name
-                board.add(new Tiles(name));
+                String name = parts[1].trim();
+                String type = parts[2].trim();
+                int cost = Integer.parseInt(parts[3].trim());
+
+                switch (type) {
+                    case "RealEstate":
+                        int[] rents = parseRents(parts, 4, 5);
+                        board.add(new RealEstate(name, cost, rents));
+                        break;
+                    case "Railroad":
+                        board.add(new Railroad(name, cost));
+                        break;
+                    case "Utility":
+                        board.add(new Utility(name, cost));
+                        break;
+                    case "Chances":
+                        board.add(new Chances(name));
+                        break;
+                    case "CommunityChest":
+                        board.add(new CommunityChest(name));
+                        break;
+                    case "Tax":
+                        board.add(new Tax(name, taxAmount));
+                        break;
+                    case "Go":
+                        board.add(new Go(name));
+                        break;
+                    case "Jail":
+                        board.add(new Jail(name));
+                        break;
+                    case "FreeParking":
+                        board.add(new FreeParking(name));
+                        break;
+                    case "GoToJail":
+                        board.add(new GoToJail(name));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown tile type: " + type);
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to load board from CSV file.");
+        } catch (IOException | NumberFormatException e) {
+            throw new RuntimeException("Failed to load board from CSV file.", e);
         }
         return board;
+    }
+
+    private int[] parseRents(String[] parts, int startIndex, int count) {
+        int[] rents = new int[count];
+        for (int i = 0; i < count; i++) {
+            rents[i] = Integer.parseInt(parts[startIndex + i].trim());
+        }
+        return rents;
     }
 
     public Dice[] getDices() {

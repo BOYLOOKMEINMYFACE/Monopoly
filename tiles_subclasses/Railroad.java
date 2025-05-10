@@ -5,7 +5,7 @@ public class Railroad extends Property {
     public static ArrayList<Railroad> railroads = new ArrayList<Railroad>();
 
     public Railroad(String name, int cost) {
-        super(name, 200);
+        super(name, cost);
         railroads.add(this);
     }
     
