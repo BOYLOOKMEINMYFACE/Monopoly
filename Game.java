@@ -27,7 +27,7 @@ public class Game {
         board = initiateBoard();
     }
 
-    public ArrayList<Tiles> initiateBoard() {
+    private ArrayList<Tiles> initiateBoard() {
         ArrayList<Tiles> board = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/monopolyTiles.csv"))) {
             String line;
@@ -69,6 +69,23 @@ public class Game {
         }
         return rents;
     }
+
+    public void broadCastBoard() {
+        System.out.println("Monopoly Board:");
+        for (int i = 0; i < board.size(); i++) {
+            Tiles tile = board.get(i);
+            StringBuilder playersOnTile = new StringBuilder();
+            for (Player player : players) {
+                if (player.getPosition() == i) {
+                    playersOnTile.append("[" + player.getName() + "]").append(" ");
+                }
+            }
+            System.out.printf("[%2d] %-23s |%-15s | %s%n",
+                    i, tile.getName(), tile.getClass().getSimpleName(), playersOnTile.toString().trim());
+        }
+    }
+    
+    
 
     public Dice[] getDices() {
         return new Dice[] { dice1, dice2 };

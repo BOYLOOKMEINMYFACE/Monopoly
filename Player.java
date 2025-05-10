@@ -2,11 +2,13 @@ public class Player {
     private String name;
     private int balance;
     private boolean inJail;
+    private int position; // Player's current position on the board
 
     public Player(String name, int initialBalance) {
         this.name = name;
         this.balance = initialBalance;
         this.inJail = false; // Player starts not in jail
+        this.position = 0; // Player starts at the "Go" position
     }   
 
     public boolean buyProperty(int propertyCost) {
@@ -52,5 +54,9 @@ public class Player {
 
     public void setInJail(boolean status) {
         inJail = status;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
