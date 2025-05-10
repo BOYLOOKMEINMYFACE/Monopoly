@@ -1,19 +1,13 @@
 public class Player {
     private String name;
     private int balance;
+    private boolean inJail;
 
     public Player(String name, int initialBalance) {
         this.name = name;
         this.balance = initialBalance;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public int getBalance() {
-        return balance;
-    }
+        this.inJail = false; // Player starts not in jail
+    }   
 
     public boolean buyProperty(int propertyCost) {
         if (balance >= propertyCost) {
@@ -40,4 +34,23 @@ public class Player {
         }
     }
 
+    public void receiveMoney(int amount) {
+        balance += amount; // Add the amount to the player's balance
+    }
+
+    public boolean getInJail() {
+        return inJail;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setInJail(boolean status) {
+        inJail = status;
+    }
 }

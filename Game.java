@@ -8,12 +8,10 @@ public class Game {
     private Dice dice1;
     private Dice dice2;
     private ArrayList<Player> players;
-    private Bank bank;
     private ArrayList<Tiles> board;
 
     // Constructor
     public Game(int numberOfPlayers) {
-        this.bank = new Bank();
 
         this.players = new ArrayList<>();
         if (numberOfPlayers < 2 || numberOfPlayers > 6) {
@@ -40,45 +38,23 @@ public class Game {
                 String type = parts[2].trim();
                 int cost = Integer.parseInt(parts[3].trim());
 
-                switch (type) {
-                    case "RealEstate":
+                board.add(switch (type) {
+                    case "RealEstate" -> {
                         int[] rents = parseRents(parts, 4, 5);
-                        // adding a dummy value for cost of house
-                        board.add(new RealEstate(name, cost, rents, 100));
-                        break;
-                    case "Railroad":
-                        board.add(new Railroad(name, cost));
-                        break;
-                    case "Utility":
-                        board.add(new Utility(name, cost));
-                        break;
-                    case "Chances":
-                        board.add(new Chances());
-                        break;
-                    case "CommunityChest":
-                        board.add(new CommunityChest());
-                        break;
-                    case "LuxuryTax":
-                        board.add(new LuxuryTax());
-                        break;
-                    case "IncomeTax":
-                        board.add(new IncomeTax());
-                        break;
-                    case "Go":
-                        board.add(new Go(name));
-                        break;
-                    case "Jail":
-                        board.add(new Jail(name));
-                        break;
-                    case "FreeParking":
-                        board.add(new FreeParking(name));
-                        break;
-                    case "GoToJail":
-                        board.add(new GoToJail(name));
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unknown tile type: " + type);
-                }
+                        yield new RealEstate(name, cost, rents, 100); // adding a dummy value for cost of house
+                    }
+                    case "Railroad" -> new Railroad(name, cost);
+                    case "Utility" -> new Utility(name, cost);
+                    case "Chances" -> new Chances();
+                    case "CommunityChest" -> new CommunityChest();
+                    case "LuxuryTax" -> new LuxuryTax();
+                    case "IncomeTax" -> new IncomeTax();
+                    case "Go" -> new Go();
+                    case "Jail" -> new Jail();
+                    case "FreeParking" -> new FreeParking();
+                    case "GoToJail" -> new GoToJail();
+                    default -> throw new IllegalArgumentException("Unknown tile type: " + type);
+                });
             }
         } catch (IOException | NumberFormatException e) {
             throw new RuntimeException("Failed to load board from CSV file.", e);
