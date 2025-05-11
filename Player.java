@@ -59,4 +59,12 @@ public class Player {
     public int getPosition() {
         return position;
     }
+    
+    public void move(int spaces) {
+        position = (position + spaces) % 40; // Assuming a standard Monopoly board has 40 spaces
+    }
+    
+    public void setPosition(int position) {
+        this.position = position; 
+    }
 }

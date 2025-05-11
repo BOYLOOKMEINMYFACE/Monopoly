@@ -85,7 +85,20 @@ public class Game {
         }
     }
     
-    
+    public void takeTurn(Player player) {
+        int rollOne = dice1.roll();
+        int rollTwo = dice2.roll();
+        System.out.println(player.getName() + " rolled a " + rollOne + " and " + rollTwo);
+        if(rollOne == rollTwo && rollOne == 1) {
+        }
+        player.move(rollOne + rollTwo);
+        Tiles currentTile = board.get(player.getPosition());
+        System.out.println(player.getName() + " landed on " + currentTile.getName());
+        if (rollOne == rollTwo) {
+            System.out.println(player.getName() + " rolled doubles! Roll again.");
+            takeTurn(player); // Allow the player to roll again
+        }
+    }
 
     public Dice[] getDices() {
         return new Dice[] { dice1, dice2 };
