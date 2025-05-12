@@ -25,6 +25,20 @@ public class Game {
         this.dice2 = new Dice(6);
 
         board = initiateBoard();
+        linkJailTiles();
+
+    }
+
+    private void linkJailTiles(){
+        for (Tiles tile : board) {
+            if (tile instanceof Jail) {
+                for (Tiles t : board) {
+                    if (t instanceof GoToJail) {
+                        ((GoToJail) t).setJailTile(((Jail)tile).getJailTile());
+                    }
+                }
+            }
+        }  
     }
 
     private ArrayList<Tiles> initiateBoard() {
@@ -50,7 +64,7 @@ public class Game {
                     case "LuxuryTax" -> new LuxuryTax();
                     case "IncomeTax" -> new IncomeTax();
                     case "Go" -> new Go();
-                    case "Jail" -> new Jail();
+                    case "Jail" -> new Jail(board.size());
                     case "FreeParking" -> new FreeParking();
                     case "GoToJail" -> new GoToJail();
                     default -> throw new IllegalArgumentException("Unknown tile type: " + type);
@@ -84,20 +98,30 @@ public class Game {
                     i, tile.getName(), tile.getClass().getSimpleName(), playersOnTile.toString().trim());
         }
     }
-    
+
     public void takeTurn(Player player) {
         int rollOne = dice1.roll();
         int rollTwo = dice2.roll();
         System.out.println(player.getName() + " rolled a " + rollOne + " and " + rollTwo);
-        if(rollOne == rollTwo && rollOne == 1) {
+        if (checkJail(rollOne, rollTwo)) {
+            System.out.println(player.getName() + " is in jail for rolling two 1s.");
+        } else {
+            executeTurn(player, rollOne, rollTwo);
+            if (rollOne == rollTwo) {
+                System.out.println(player.getName() + " rolled doubles! Roll again.");
+                takeTurn(player); // Allow the player to roll again
+            }
         }
+    }
+
+    private void executeTurn(Player player, int rollOne, int rollTwo) {
         player.move(rollOne + rollTwo);
         Tiles currentTile = board.get(player.getPosition());
-        System.out.println(player.getName() + " landed on " + currentTile.getName());
-        if (rollOne == rollTwo) {
-            System.out.println(player.getName() + " rolled doubles! Roll again.");
-            takeTurn(player); // Allow the player to roll again
-        }
+        currentTile.executeAction(player);
+    }
+
+    private boolean checkJail(int rollOne, int rollTwo) {
+        return (rollOne == rollTwo && rollOne == 1);
     }
 
     public Dice[] getDices() {

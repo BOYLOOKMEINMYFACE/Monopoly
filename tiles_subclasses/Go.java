@@ -9,4 +9,9 @@ public class Go extends Tiles {
         player.receiveMoney(amount);
         System.out.println(player.getName() + " collected " + amount + " from" + super.getName());
     }
+
+    public void executeAction(Player player) {
+        super.executeAction(player);
+        collectMoney(player);
+    }
 }
