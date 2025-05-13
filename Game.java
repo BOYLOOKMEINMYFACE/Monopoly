@@ -10,8 +10,12 @@ public class Game {
     private ArrayList<Player> players;
     private ArrayList<Tiles> board;
 
+    private Jail jail;
+
     // Constructor
     public Game(int numberOfPlayers) {
+
+        Player.setBoardSize(40); // Set the board size for all players
 
         this.players = new ArrayList<>();
         if (numberOfPlayers < 2 || numberOfPlayers > 6) {
@@ -32,13 +36,15 @@ public class Game {
     private void linkJailTiles(){
         for (Tiles tile : board) {
             if (tile instanceof Jail) {
+                this.jail = (Jail) tile;
+                this.jail.setJailTile(board.indexOf(tile));
                 for (Tiles t : board) {
                     if (t instanceof GoToJail) {
-                        ((GoToJail) t).setJailTile(((Jail)tile).getJailTile());
+                        ((GoToJail) t).setJail(((Jail)tile));
                     }
                 }
             }
-        }  
+        }
     }
 
     private ArrayList<Tiles> initiateBoard() {
@@ -63,9 +69,9 @@ public class Game {
                     case "CommunityChest" -> new CommunityChest();
                     case "LuxuryTax" -> new LuxuryTax();
                     case "IncomeTax" -> new IncomeTax();
-                    case "Go" -> new Go();
+                    case "Go" -> new Tiles("Go");
                     case "Jail" -> new Jail(board.size());
-                    case "FreeParking" -> new FreeParking();
+                    case "FreeParking" -> new Tiles("Free Parking");
                     case "GoToJail" -> new GoToJail();
                     default -> throw new IllegalArgumentException("Unknown tile type: " + type);
                 });
@@ -94,18 +100,19 @@ public class Game {
                     playersOnTile.append("[" + player.getName() + "]").append(" ");
                 }
             }
-            System.out.printf("[%2d] %-23s |%-15s | %s%n",
-                    i, tile.getName(), tile.getClass().getSimpleName(), playersOnTile.toString().trim());
+            System.out.printf("[%2d] %-23s | %s%n",
+                    i, tile.getName(), playersOnTile.toString().trim());
         }
     }
 
     public void takeTurn(Player player) {
+        //roll the dices first
         int rollOne = dice1.roll();
         int rollTwo = dice2.roll();
         System.out.println(player.getName() + " rolled a " + rollOne + " and " + rollTwo);
-        if (checkJail(rollOne, rollTwo)) {
-            System.out.println(player.getName() + " is in jail for rolling two 1s.");
-        } else {
+        if (checkJail(rollOne, rollTwo)) { //check if the player is going to jail
+            sendToJail(player);    
+        } else { //if not in jail, move the playere
             executeTurn(player, rollOne, rollTwo);
             if (rollOne == rollTwo) {
                 System.out.println(player.getName() + " rolled doubles! Roll again.");
@@ -115,9 +122,29 @@ public class Game {
     }
 
     private void executeTurn(Player player, int rollOne, int rollTwo) {
-        player.move(rollOne + rollTwo);
+        if(player.move(rollOne + rollTwo)){
+            System.out.println(player.getName() + " passed GO and collected $200!");
+            player.receiveMoney(200);
+        }
         Tiles currentTile = board.get(player.getPosition());
         currentTile.executeAction(player);
+    }
+
+    public void playOneTurn(){
+        for (Player player : players) {
+            if (!player.getInJail()) {
+                takeTurn(player);
+            } else {
+                jail.executeAction(player);
+            }
+        }
+        broadCastBoard();
+    }
+
+    private void sendToJail(Player player) {
+        System.out.println(player.getName() + " has been sent to jail for rolling two 1s!");
+        player.setPosition(jail.getJailTile());
+        jail.addPlayerToJail(player);
     }
 
     private boolean checkJail(int rollOne, int rollTwo) {

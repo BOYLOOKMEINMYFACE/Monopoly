@@ -1,4 +1,5 @@
 public class Player {
+    private static int boardSize;
     private String name;
     private int balance;
     private boolean inJail;
@@ -60,11 +61,17 @@ public class Player {
         return position;
     }
     
-    public void move(int spaces) {
-        position = (position + spaces) % 40; // Assuming a standard Monopoly board has 40 spaces
+    public boolean move(int spaces) {
+        boolean passedGo = position + spaces >= boardSize;
+        position = (position + spaces) % boardSize; // Move the player forward on the board
+        return passedGo;
     }
     
     public void setPosition(int position) {
         this.position = position; 
+    }
+
+    public static void setBoardSize(int size) {
+        boardSize = size;
     }
 }

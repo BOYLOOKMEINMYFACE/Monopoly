@@ -1,5 +1,5 @@
 public class GoToJail extends Tiles {
-    private int jailTile;
+    private Jail jail;
 
     public GoToJail() {
         super("Go to Jail");
@@ -7,8 +7,9 @@ public class GoToJail extends Tiles {
 
     public void arrested(Player player) {
         System.out.println(player.getName() + " has been arrested and sent to jail!");
-        player.setPosition(jailTile);
+        player.setPosition(jail.getJailTile());
         player.setInJail(true);
+        jail.addPlayerToJail(player);
     }
 
     public void executeAction(Player player) {
@@ -16,7 +17,7 @@ public class GoToJail extends Tiles {
         arrested(player);
     }
 
-    public void setJailTile(int jailTile) {
-        this.jailTile = jailTile;
+    public void setJail(Jail jail) {
+        this.jail = jail;
     }
 }
