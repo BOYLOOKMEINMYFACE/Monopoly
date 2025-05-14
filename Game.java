@@ -28,7 +28,7 @@ public class Game {
         this.dice1 = new Dice(6);
         this.dice2 = new Dice(6);
 
-        board = initiateBoard();
+        board = initializeBoard();
         linkJailTiles();
 
     }
@@ -47,7 +47,7 @@ public class Game {
         }
     }
 
-    private ArrayList<Tiles> initiateBoard() {
+    private ArrayList<Tiles> initializeBoard() {
         ArrayList<Tiles> board = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/monopolyTiles.csv"))) {
             String line;
@@ -61,7 +61,8 @@ public class Game {
                 board.add(switch (type) {
                     case "RealEstate" -> {
                         int[] rents = parseRents(parts, 4, 5);
-                        yield new RealEstate(name, cost, rents, 100); // adding a dummy value for cost of house
+                        int costOfHouse = Integer.parseInt(parts[9].trim());
+                        yield new RealEstate(name, cost, rents, costOfHouse); 
                     }
                     case "Railroad" -> new Railroad(name, cost);
                     case "Utility" -> new Utility(name, cost);
@@ -90,6 +91,20 @@ public class Game {
         return rents;
     }
 
+    public void play(){
+        initialSetUp();
+        while (!checkEnd()) {
+            playOneRound();
+        }
+        System.out.println("Game Over!");
+    }
+
+    public void initialSetUp(){
+        System.out.println("Welcome to Monopoly!");
+        System.out.println("Game initialized with " + players.size() + " players.");
+        broadCastBoard();
+    }
+
     public void broadCastBoard() {
         System.out.println("Monopoly Board:");
         for (int i = 0; i < board.size(); i++) {
@@ -105,11 +120,23 @@ public class Game {
         }
     }
 
+    public void playOneRound(){
+        for (Player player : players) {
+            if (!player.getInJail()) {
+                takeTurn(player);
+            } else {
+                jail.executeAction(player);
+            }
+        }
+        broadCastBoard();
+    }
+
     public void takeTurn(Player player) {
         //roll the dices first
         int rollOne = dice1.roll();
         int rollTwo = dice2.roll();
         System.out.println(player.getName() + " rolled a " + rollOne + " and " + rollTwo);
+
         if (checkJail(rollOne, rollTwo)) { //check if the player is going to jail
             sendToJail(player);    
         } else { //if not in jail, move the playere
@@ -130,15 +157,20 @@ public class Game {
         currentTile.executeAction(player);
     }
 
-    public void playOneTurn(){
+    private int count = 0;
+    public boolean checkEnd() {
+        //Temporary checkEndHolder
+        return count++ > 10;
+        /* 
         for (Player player : players) {
-            if (!player.getInJail()) {
-                takeTurn(player);
-            } else {
-                jail.executeAction(player);
+            if (player.getBalance() <= 0) {
+                System.out.println(player.getName() + " is bankrupt!");
+                players.remove(player);
+                return players.size() == 1; // Game ends if only one player remains
             }
         }
-        broadCastBoard();
+        return false; // Game continues
+        */
     }
 
     private void sendToJail(Player player) {

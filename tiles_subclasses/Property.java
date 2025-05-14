@@ -17,6 +17,25 @@ public class Property extends Tiles {
         this.owner = null; // No owner initially
     }
 
+    public void executeAction(Player player) {
+        if (owner == null) {
+            // If the property is not owned, ask the player if they want to buy it
+            if (player.decideToBuyProperty(cost)) {
+                sellProperty(player); // Sell the property to the player
+            }
+        } else if (owner != player) {
+            // If the property is owned by another player, collect rent
+            collectRent(player);
+        }
+    }
+
+    public void collectRent(Player player){
+        player.payRent(getRent()); // Deduct rent from the player
+        if (player.getBalance() != -1){
+            owner.receiveMoney(rent); // Add rent to the owner's balance
+        }
+    }
+
     public int getCost() {
         return cost;
     }

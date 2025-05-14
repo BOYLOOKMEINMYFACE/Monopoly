@@ -10,7 +10,13 @@ public class Player {
         this.balance = initialBalance;
         this.inJail = false; // Player starts not in jail
         this.position = 0; // Player starts at the "Go" position
-    }   
+    } 
+
+    public boolean decideToBuyProperty(int propertyCost) {
+        // Logic to decide whether to buy a property
+        // For simplicity, let's say the player buys if they can afford it
+        return true;
+    }
 
     public boolean buyProperty(int propertyCost) {
         if (balance >= propertyCost) {
@@ -32,13 +38,16 @@ public class Player {
     public void payRent(int rent) {
         if (balance >= rent) {
             balance -= rent; // Deduct the rent from the player's balance
+            System.out.println(name + " paid $" + rent + " in rent.");
         } else {
             System.out.println("Not enough balance to pay rent.");
+            balance = -1; // Set balance to -1 to indicate bankruptcy
         }
     }
 
     public void receiveMoney(int amount) {
         balance += amount; // Add the amount to the player's balance
+        System.out.println(name + " received $" + amount);
     }
 
     public boolean getInJail() {
