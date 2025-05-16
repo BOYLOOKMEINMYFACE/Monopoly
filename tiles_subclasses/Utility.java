@@ -18,5 +18,5 @@ public class Utility extends Property {
         int totalDiceRoll = game.getDices()[0].roll() + game.getDices()[1].roll();
         return  rentMultiplier * totalDiceRoll;
     }
-
+    
 }

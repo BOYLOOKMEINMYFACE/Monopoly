@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+
 public class Game {
 
     private Dice dice1;
@@ -33,14 +34,14 @@ public class Game {
 
     }
 
-    private void linkJailTiles(){
+    private void linkJailTiles() {
         for (Tiles tile : board) {
             if (tile instanceof Jail) {
                 this.jail = (Jail) tile;
                 this.jail.setJailTile(board.indexOf(tile));
                 for (Tiles t : board) {
                     if (t instanceof GoToJail) {
-                        ((GoToJail) t).setJail(((Jail)tile));
+                        ((GoToJail) t).setJail(((Jail) tile));
                     }
                 }
             }
@@ -62,7 +63,7 @@ public class Game {
                     case "RealEstate" -> {
                         int[] rents = parseRents(parts, 4, 5);
                         int costOfHouse = Integer.parseInt(parts[9].trim());
-                        yield new RealEstate(name, cost, rents, costOfHouse); 
+                        yield new RealEstate(name, cost, rents, costOfHouse);
                     }
                     case "Railroad" -> new Railroad(name, cost);
                     case "Utility" -> new Utility(name, cost);
@@ -91,15 +92,16 @@ public class Game {
         return rents;
     }
 
-    public void play(){
+    public void play() {
         initialSetUp();
         while (!checkEnd()) {
             playOneRound();
         }
-        System.out.println("Game Over!");
+        broadCastGameEnd(getWinner());
+
     }
 
-    public void initialSetUp(){
+    public void initialSetUp() {
         System.out.println("Welcome to Monopoly!");
         System.out.println("Game initialized with " + players.size() + " players.");
         broadCastBoard();
@@ -112,45 +114,66 @@ public class Game {
             StringBuilder playersOnTile = new StringBuilder();
             for (Player player : players) {
                 if (player.getPosition() == i) {
-                    playersOnTile.append("[" + player.getName() + "]").append(" ");
+                    playersOnTile.append("[").append(player.getName()).append("] ").append(" ");
                 }
             }
-            System.out.printf("[%2d] %-23s | %s%n",
-                    i, tile.getName(), playersOnTile.toString().trim());
+            String owner = "";
+            if (tile instanceof Property) {
+                Player tileOwner = ((Property) tile).getOwner();
+                owner = (tileOwner != null) ? tileOwner.getName() : "";
+            }
+            System.out.printf("[%2d] %-23s | Owner: %-10s | %s%n",
+                    i, tile, owner, playersOnTile.toString().trim());
         }
     }
 
-    public void playOneRound(){
+    public void broadCastBalance() {
+        System.out.println("Player Balances:");
+        for (Player player : players) {
+            if (player.getBalance() < 0) {
+                System.out.printf("%s is bankrupt!%n", player);
+            } else {
+                System.out.printf("%s balance: $%d%n", player, player.getBalance());
+            }
+        }
+        System.out.println("____________________________________________________________");
+    }
+
+    public void playOneRound() {
+        System.out.println("============================================================");
+        System.out.println("New Round!");
+        broadCastBalance();
         for (Player player : players) {
             if (!player.getInJail()) {
                 takeTurn(player);
             } else {
                 jail.executeAction(player);
             }
+            System.out.println("____________________________________________________________");
         }
-        broadCastBoard();
+        // broadCastBoard();
     }
 
     public void takeTurn(Player player) {
-        //roll the dices first
+        // roll the dices first
         int rollOne = dice1.roll();
         int rollTwo = dice2.roll();
-        System.out.println(player.getName() + " rolled a " + rollOne + " and " + rollTwo);
+        System.out.println(player + " rolled a " + rollOne + " and " + rollTwo);
 
-        if (checkJail(rollOne, rollTwo)) { //check if the player is going to jail
-            sendToJail(player);    
-        } else { //if not in jail, move the playere
+        if (checkJail(rollOne, rollTwo)) { // check if the player is going to jail
+            sendToJail(player);
+        } else { // if not in jail, move the playere
             executeTurn(player, rollOne, rollTwo);
             if (rollOne == rollTwo) {
-                System.out.println(player.getName() + " rolled doubles! Roll again.");
+                System.out.println(player + " rolled doubles! Roll again.");
                 takeTurn(player); // Allow the player to roll again
             }
         }
     }
 
     private void executeTurn(Player player, int rollOne, int rollTwo) {
-        if(player.move(rollOne + rollTwo)){
-            System.out.println(player.getName() + " passed GO and collected $200!");
+        if (player.move(rollOne + rollTwo)) {
+            System.out.println(player + " passed GO and collected $200!");
             player.receiveMoney(200);
         }
         Tiles currentTile = board.get(player.getPosition());
@@ -158,23 +181,38 @@ public class Game {
     }
 
     private int count = 0;
+
     public boolean checkEnd() {
-        //Temporary checkEndHolder
-        return count++ > 10;
-        /* 
         for (Player player : players) {
             if (player.getBalance() <= 0) {
-                System.out.println(player.getName() + " is bankrupt!");
+                System.out.println(player + " is bankrupt!");
                 players.remove(player);
                 return players.size() == 1; // Game ends if only one player remains
             }
         }
-        return false; // Game continues
-        */
+        return count++ > 25 || false; // Game continues
+    }
+
+    public Player getWinner() {
+        Player richest = players.get(0);
+        for (Player player : players) {
+            if (player.getBalance() > richest.getBalance()) {
+                richest = player;
+            }
+        }
+        return richest;
+    }
+
+    public void broadCastGameEnd(Player winner) {
+        System.out.println("============================================================");
+        System.out.println("Game Over!");
+        System.out.println(
+                winner + " has won the game with a balance of $" +
+                winner.getBalance() + "!");
     }
 
     private void sendToJail(Player player) {
-        System.out.println(player.getName() + " has been sent to jail for rolling two 1s!");
+        System.out.println(player + " has been sent to jail for rolling two 1s!");
         player.setPosition(jail.getJailTile());
         jail.addPlayerToJail(player);
     }

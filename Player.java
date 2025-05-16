@@ -35,10 +35,10 @@ public class Player {
         }
     }
 
-    public void payRent(int rent) {
+    public void payRent(Player owner, int rent) {
         if (balance >= rent) {
             balance -= rent; // Deduct the rent from the player's balance
-            System.out.println(name + " paid $" + rent + " in rent.");
+            System.out.println(name + " paid $" + rent + " in rent to " + owner.getName());
         } else {
             System.out.println("Not enough balance to pay rent.");
             balance = -1; // Set balance to -1 to indicate bankruptcy
@@ -82,5 +82,9 @@ public class Player {
 
     public static void setBoardSize(int size) {
         boardSize = size;
+    }
+
+    public String toString() {
+        return name;
     }
 }

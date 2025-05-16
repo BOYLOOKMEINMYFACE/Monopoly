@@ -14,7 +14,7 @@ public class RealEstate extends Property {
     }
 
     public void buildHouse() {
-        if (numHouses < rents.length - 1) { // Check if there is room for more houses
+        if (numHouses < MAX_HOUSES) { // Check if there is room for more houses
             numHouses++;
             super.getOwner().buyHouse(getCostOfHouse()); // Deduct the cost of building a house from the owner's balance
         } else {

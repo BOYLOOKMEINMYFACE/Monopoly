@@ -18,6 +18,7 @@ public class Property extends Tiles {
     }
 
     public void executeAction(Player player) {
+        super.executeAction(player);
         if (owner == null) {
             // If the property is not owned, ask the player if they want to buy it
             if (player.decideToBuyProperty(cost)) {
@@ -30,9 +31,9 @@ public class Property extends Tiles {
     }
 
     public void collectRent(Player player){
-        player.payRent(getRent()); // Deduct rent from the player
+        player.payRent(owner, getRent()); // Deduct rent from the player
         if (player.getBalance() != -1){
-            owner.receiveMoney(rent); // Add rent to the owner's balance
+            owner.receiveMoney(getRent()); // Add rent to the owner's balance
         }
     }
 
@@ -51,6 +52,7 @@ public class Property extends Tiles {
     public void sellProperty(Player player) {
         if (owner == null && player.buyProperty(cost)) {
             owner = player; // Set the owner to the player who bought the property
+            System.out.println(player.getName() + " bought " + getName() + " for $" + cost);
         }
     }
 
