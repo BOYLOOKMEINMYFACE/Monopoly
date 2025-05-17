@@ -49,6 +49,10 @@ public class Property extends Tiles {
         return owner;
     }
 
+    public void setOwner(Player owner) {
+        this.owner = owner; // Set the owner of the property
+    }
+
     public void sellProperty(Player player) {
         if (owner == null && player.buyProperty(cost)) {
             owner = player; // Set the owner to the player who bought the property

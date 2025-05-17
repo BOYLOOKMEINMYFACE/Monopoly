@@ -18,6 +18,12 @@ public class Player {
         return true;
     }
 
+    public boolean decideToBuildHouse() {
+        // Logic to decide whether to build a house
+        // For simplicity, let's say the player builds if they can afford it
+        return true;
+    }
+
     public boolean buyProperty(int propertyCost) {
         if (balance >= propertyCost) {
             balance -= propertyCost;

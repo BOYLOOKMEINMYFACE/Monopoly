@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
 
 public class Game {
 
@@ -23,7 +25,7 @@ public class Game {
             throw new IllegalArgumentException("Number of players must be between 2 and 6.");
         }
         for (int i = 0; i < numberOfPlayers; i++) {
-            players.add(new Player("Player " + (i + 1), 1500));
+            players.add(new Player("P" + (i + 1), 1500));
         }
 
         this.dice1 = new Dice(6);
@@ -61,9 +63,10 @@ public class Game {
 
                 board.add(switch (type) {
                     case "RealEstate" -> {
-                        int[] rents = parseRents(parts, 4, 5);
-                        int costOfHouse = Integer.parseInt(parts[9].trim());
-                        yield new RealEstate(name, cost, rents, costOfHouse);
+                        int[] rents = parseRents(parts, 4, 6);
+                        int costOfHouse = Integer.parseInt(parts[10].trim());
+                        int group = Integer.parseInt(parts[11].trim());
+                        yield new RealEstate(name, cost, rents, costOfHouse, group);
                     }
                     case "Railroad" -> new Railroad(name, cost);
                     case "Utility" -> new Utility(name, cost);
@@ -122,8 +125,8 @@ public class Game {
                 Player tileOwner = ((Property) tile).getOwner();
                 owner = (tileOwner != null) ? tileOwner.getName() : "";
             }
-            System.out.printf("[%2d] %-23s | Owner: %-10s | %s%n",
-                    i, tile, owner, playersOnTile.toString().trim());
+            System.out.printf("[%2d] %-25s | Owner: %-4s | %s%n",
+                    i + 1, tile.getName(), owner, playersOnTile.toString().trim());
         }
     }
 
@@ -151,7 +154,8 @@ public class Game {
             }
             System.out.println("____________________________________________________________");
         }
-        // broadCastBoard();
+        broadCastBoard();
+
     }
 
     public void takeTurn(Player player) {
@@ -159,6 +163,8 @@ public class Game {
         int rollOne = dice1.roll();
         int rollTwo = dice2.roll();
         System.out.println(player + " rolled a " + rollOne + " and " + rollTwo);
+
+        checkMonopoly(); // Check for monopolies of properties at the start of each turn
 
         if (checkJail(rollOne, rollTwo)) { // check if the player is going to jail
             sendToJail(player);
@@ -208,7 +214,32 @@ public class Game {
         System.out.println("Game Over!");
         System.out.println(
                 winner + " has won the game with a balance of $" +
-                winner.getBalance() + "!");
+                        winner.getBalance() + "!");
+    }
+
+    public void checkMonopoly() {
+        // Map from group number to list of RealEstate in that group
+        Map<Integer, List<RealEstate>> groupMap = new HashMap<>();
+        for (Tiles tile : board) {
+            if (tile instanceof RealEstate property) {
+                groupMap.computeIfAbsent(property.getGroup(), k -> new ArrayList<>()).add(property);
+            }
+        }
+
+        // For each group, check if all properties are owned by the same player
+        for (List<RealEstate> groupProps : groupMap.values()) {
+            Player owner = groupProps.get(0).getOwner();
+            boolean hasMonopoly = owner != null;
+            for (RealEstate prop : groupProps) {
+                if (prop.getOwner() != owner || owner == null) {
+                    hasMonopoly = false;
+                    break;
+                }
+            }
+            for (RealEstate prop : groupProps) {
+                prop.setMonopoly(hasMonopoly);
+            }
+        }
     }
 
     private void sendToJail(Player player) {
