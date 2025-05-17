@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class CommunityChest extends Tiles {
 
     private String[] messages;
@@ -17,7 +15,6 @@ public class CommunityChest extends Tiles {
             "Bank error in your favor. Collect $200",
             "Doctor's fee. Pay $50",
             "From sale of stock you get $50",
-            "Get Out of Jail Free card",
             "Go to Jail. Go directly to Jail. Do not pass Go. Do not collect $200",
             "Holiday fund matures. Receive $100",
             "Income tax refund. Collect $20",
@@ -33,14 +30,20 @@ public class CommunityChest extends Tiles {
 
     private int[] setUpEffects() {
         return new int[]{
-            200, 200, -50, 50, 0, -200, 100, 20, 10, 100,
+            200, 200, -50, 50, 0, 100, 20, 0, 100,
             -100, -50, 25, -40, -115, 10
         };
     }
-    
-    public Object[] getMessageAndEffect() {
-        int randomIndex = (int) (Math.random() * messages.length);
-        return new Object[]{messages[randomIndex], effects[randomIndex]};
-    }
 
+    public void executeAction(Player player) {
+        super.executeAction(player);
+        int randomIndex = (int) (Math.random() * messages.length);
+        System.out.println(messages[randomIndex]);
+        int effect = effects[randomIndex];
+        if (effect > 0) {
+            player.receiveMoney(effect);
+        } else if (effect < 0) {
+            player.payMoney(-effect);
+        }
+    }
 }

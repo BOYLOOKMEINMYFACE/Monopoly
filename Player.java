@@ -41,12 +41,25 @@ public class Player {
         }
     }
 
-    public void payRent(Player owner, int rent) {
-        if (balance >= rent) {
-            balance -= rent; // Deduct the rent from the player's balance
-            System.out.println(name + " paid $" + rent + " in rent to " + owner.getName());
+    public void payMoney(Player receiver, int amount) {
+        if (balance >= amount) {
+            balance -= amount; // Deduct the amount from the player's balance
+            receiver.receiveMoney(amount); // Transfer the amount to the receiver
+            System.out.println(name + " paid $" + amount + " to " + receiver.getName());
         } else {
-            System.out.println("Not enough balance to pay rent.");
+            System.out.println("Not enough balance to pay.");
+            balance = -1; // Set balance to -1 to indicate bankruptcy
+        }
+
+    }
+    
+    // Overloaded method to pay money without a receiver
+    public void payMoney(int amount) {
+        if (balance >= amount) {
+            balance -= amount; // Deduct the amount from the player's balance
+            System.out.println(name + " paid $" + amount);
+        } else {
+            System.out.println("Not enough balance to pay.");
             balance = -1; // Set balance to -1 to indicate bankruptcy
         }
     }
