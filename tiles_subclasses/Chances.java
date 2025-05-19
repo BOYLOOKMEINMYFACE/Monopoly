@@ -23,11 +23,16 @@ public class Chances extends Tiles {
         int destination = findPosition(destinations.get(randomIndex));
         System.out.println("Moving to " + destinations.get(randomIndex));
         int moveDistance = (destination - player.getPosition() + board.size()) % board.size();
+        executeTileAction(player, moveDistance);
+    }
+
+    public void executeTileAction(Player player, int moveDistance) {
         if (player.move(moveDistance)) {
             System.out.println(player + " passed GO and collected $200!");
             player.receiveMoney(200);
         }
-        
+        Tiles currentTile = board.get(player.getPosition());
+        currentTile.executeAction(player);
     }
 
     private int findPosition(String destination) {
@@ -60,7 +65,3 @@ public class Chances extends Tiles {
         this.board = board; // Set the board for the Chances tile
     }
 }
-
-
-
-

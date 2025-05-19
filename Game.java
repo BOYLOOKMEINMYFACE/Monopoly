@@ -178,9 +178,9 @@ public class Game {
 
         if (checkJail(rollOne, rollTwo)) { // check if the player is going to jail
             sendToJail(player);
-        } else { // if not in jail, move the playere
+        } else { // if not in jail, move the player
             executeTurn(player, rollOne, rollTwo);
-            if (rollOne == rollTwo) {
+            if (rollOne == rollTwo && !player.getInJail()) { // check if the player rolled doubles
                 System.out.println(player + " rolled doubles! Roll again.");
                 takeTurn(player); // Allow the player to roll again
             }

@@ -23,6 +23,7 @@ public class RealEstate extends Property {
         } else {
             if (isMonopoly) {
                 System.out.println(getOwner().getName() + " has a monopoly on this tile.");
+                System.out.println("Current number of houses: " + numHouses);
             }
             super.executeAction(player); // Call the parent class's executeAction method
         }
