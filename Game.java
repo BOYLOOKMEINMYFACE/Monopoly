@@ -52,6 +52,7 @@ public class Game {
 
     private ArrayList<Tiles> initializeBoard() {
         ArrayList<Tiles> board = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/monopolyTiles.csv"))) {
             String line;
             br.readLine(); // Skip the first line (header)
@@ -70,8 +71,8 @@ public class Game {
                     }
                     case "Railroad" -> new Railroad(name, cost);
                     case "Utility" -> new Utility(name, cost);
-                    case "Chances" -> new Chances();
-                    case "CommunityChest" -> new CommunityChest();
+                    case "Chances" -> new Chances("Chances");
+                    case "CommunityChest" -> new CommunityChest("Community Chest");
                     case "LuxuryTax" -> new LuxuryTax();
                     case "IncomeTax" -> new IncomeTax();
                     case "Go" -> new Tiles("Go");

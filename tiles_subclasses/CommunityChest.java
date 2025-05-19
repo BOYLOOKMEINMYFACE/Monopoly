@@ -1,49 +1,60 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class CommunityChest extends Tiles {
 
-    private String[] messages;
-    private int[] effects;
+    private ArrayList<String> messages;
+    private ArrayList<Integer> effects;
 
-    public CommunityChest() {
-        super("Community Chest");
+    public CommunityChest(String name) {
+        super(name);
         this.messages = setUpMessages();
         this.effects = setUpEffects();
-    }
-    
-    private String[] setUpMessages() {
-        return new String[]{
-            "Advance to Go (Collect $200)",
-            "Bank error in your favor. Collect $200",
-            "Doctor's fee. Pay $50",
-            "From sale of stock you get $50",
-            "Go to Jail. Go directly to Jail. Do not pass Go. Do not collect $200",
-            "Holiday fund matures. Receive $100",
-            "Income tax refund. Collect $20",
-            "It is your birthday. Collect $10 from each player",
-            "Life insurance matures. Collect $100",
-            "Pay hospital fees of $100",
-            "Pay school fees of $50",
-            "Receive $25 consultancy fee",
-            "You are assessed for street repairs. Pay $40 per house and $115 per hotel you own.",
-            "You have won second prize in a beauty contest. Collect $10"
-        };
-    }
-
-    private int[] setUpEffects() {
-        return new int[]{
-            200, 200, -50, 50, 0, 100, 20, 0, 100,
-            -100, -50, 25, -40, -115, 10
-        };
     }
 
     public void executeAction(Player player) {
         super.executeAction(player);
-        int randomIndex = (int) (Math.random() * messages.length);
-        System.out.println(messages[randomIndex]);
-        int effect = effects[randomIndex];
+        int randomIndex = (int) (Math.random() * messages.size());
+        System.out.println(messages.get(randomIndex));
+        int effect = effects.get(randomIndex);
         if (effect > 0) {
             player.receiveMoney(effect);
         } else if (effect < 0) {
             player.payMoney(-effect);
         }
+    }
+
+    private ArrayList<String> setUpMessages() {
+        ArrayList<String> messageList = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("communityChestMessage.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",", 2);
+                if (parts.length > 0) {
+                    messageList.add(parts[0].trim());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return messageList;
+    }
+
+    private ArrayList<Integer> setUpEffects(){
+        ArrayList<Integer> effectList = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("communityChestEffects.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length > 0) {
+                    effectList.add(Integer.parseInt(parts[0].trim()));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return effectList;
     }
 }
