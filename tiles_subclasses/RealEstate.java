@@ -64,7 +64,7 @@ public class RealEstate extends Property {
         return group; // Return the group to which the property belongs
     }
 
-    public String getName() {
-        return super.getName() + " (" + group + ")"; // Return the name of the property
+    public String toString() {
+        return super.toString() + " (" + group + ")"; // Return the name of the property
     }
 }

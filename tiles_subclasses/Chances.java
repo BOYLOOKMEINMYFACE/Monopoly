@@ -21,10 +21,13 @@ public class Chances extends Tiles {
         int randomIndex = (int) (Math.random() * messages.size());
         System.out.println(messages.get(randomIndex));
         int destination = findPosition(destinations.get(randomIndex));
-        if (destination != -1) {
-            System.out.println("Moving to " + destinations.get(randomIndex));
-            player.move(destination);
+        System.out.println("Moving to " + destinations.get(randomIndex));
+        int moveDistance = (destination - player.getPosition() + board.size()) % board.size();
+        if (player.move(moveDistance)) {
+            System.out.println(player + " passed GO and collected $200!");
+            player.receiveMoney(200);
         }
+        
     }
 
     private int findPosition(String destination) {

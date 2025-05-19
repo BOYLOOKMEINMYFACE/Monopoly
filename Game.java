@@ -33,7 +33,16 @@ public class Game {
 
         board = initializeBoard();
         linkJailTiles();
+        linkChancesTiles();
 
+    }
+
+    private void linkChancesTiles() {
+        for (Tiles tile : board) {
+            if (tile instanceof Chances) {
+                ((Chances) tile).setBoard(board);
+            }
+        }
     }
 
     private void linkJailTiles() {
@@ -127,7 +136,7 @@ public class Game {
                 owner = (tileOwner != null) ? tileOwner.getName() : "";
             }
             System.out.printf("[%2d] %-25s | Owner: %-4s | %s%n",
-                    i + 1, tile.getName(), owner, playersOnTile.toString().trim());
+                    i + 1, tile, owner, playersOnTile.toString().trim());
         }
     }
 

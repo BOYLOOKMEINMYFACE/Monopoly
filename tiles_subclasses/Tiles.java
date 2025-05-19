@@ -9,6 +9,10 @@ public class Tiles{
         return name;
     }
 
+    public String toString() {
+        return name;
+    }
+
     public void executeAction(Player player) {
         // Default action for a tile, can be overridden by subclasses
         System.out.println(player.getName() + " landed on " + name);
