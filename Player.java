@@ -44,7 +44,6 @@ public class Player {
     public void payMoney(Player receiver, int amount) {
         if (balance >= amount) {
             balance -= amount; // Deduct the amount from the player's balance
-            receiver.receiveMoney(amount); // Transfer the amount to the receiver
             System.out.println(name + " paid $" + amount + " to " + receiver.getName());
         } else {
             System.out.println("Not enough balance to pay.");

@@ -8,6 +8,7 @@ public class Chances extends Tiles {
 
     private ArrayList<String> messages;
     private ArrayList<String> destinations;
+    private ArrayList<Tiles> board;
 
     public Chances(String name) {
         super(name);
@@ -19,16 +20,27 @@ public class Chances extends Tiles {
         super.executeAction(player);
         int randomIndex = (int) (Math.random() * messages.size());
         System.out.println(messages.get(randomIndex));
-        String destination = destinations.get(randomIndex);
-        if (!(destination.equals("null")|| destination.equals("Go"))) {
+        int destination = findPosition(destinations.get(randomIndex));
+        if (destination != -1) {
+            System.out.println("Moving to " + destinations.get(randomIndex));
             player.move(destination);
         }
     }
 
+    private int findPosition(String destination) {
+        for (int i = 0; i < board.size(); i++) {
+            if (board.get(i).getName().equals(destination)) {
+                return i;
+            }
+        }
+        return -1; // Return -1 if the destination is not found
+    }
+
     private ArrayList<String> setUpMessages(int index) {
         ArrayList<String> messageList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("communityChestMessage.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/chancesMessage.csv"))) {
             String line;
+            br.readLine(); // Skip the first line (header)
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",", 2);
                 if (parts.length > 0) {
@@ -39,6 +51,10 @@ public class Chances extends Tiles {
             e.printStackTrace();
         }
         return messageList;
+    }
+
+    public void setBoard(ArrayList<Tiles> board) {
+        this.board = board; // Set the board for the Chances tile
     }
 }
 

@@ -28,8 +28,9 @@ public class CommunityChest extends Tiles {
 
     private ArrayList<String> setUpMessages() {
         ArrayList<String> messageList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("communityChestMessage.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/communityChestMessage.csv"))) {
             String line;
+            br.readLine(); // Skip the first line (header)
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",", 2);
                 if (parts.length > 0) {
@@ -44,12 +45,13 @@ public class CommunityChest extends Tiles {
 
     private ArrayList<Integer> setUpEffects(){
         ArrayList<Integer> effectList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("communityChestEffects.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("tiles_subclasses/communityChestMessage.csv"))) {
             String line;
+            br.readLine(); // Skip the first line (header)
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length > 0) {
-                    effectList.add(Integer.parseInt(parts[0].trim()));
+                    effectList.add(Integer.parseInt(parts[1].trim()));
                 }
             }
         } catch (IOException e) {
