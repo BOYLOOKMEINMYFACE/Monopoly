@@ -34,7 +34,7 @@ public class RealEstate extends Property {
         System.out.println("Current number of houses: " + numHouses);
         System.out.println("Cost of house: " + getCostOfHouse());
         // If the property is owned by the player, they can build houses
-        if (player.decideToBuildHouse()) {
+        if (player.decideToBuy(getCost())) {
             System.out.println(player.getName() + " is building a house on " + getName());
             buildHouse();
         }

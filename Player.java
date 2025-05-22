@@ -12,16 +12,11 @@ public class Player {
         this.position = 0; // Player starts at the "Go" position
     } 
 
-    public boolean decideToBuyProperty(int propertyCost) {
+    public boolean decideToBuy(int propertyCost) {
         // Logic to decide whether to buy a property
-        // For simplicity, let's say the player buys if they can afford it
-        return true;
-    }
-
-    public boolean decideToBuildHouse() {
-        // Logic to decide whether to build a house
-        // For simplicity, let's say the player builds if they can afford it
-        return true;
+        // The lower the property cost, the higher the chance to buy
+        double probability = Math.max(0.1, Math.min(1.0, 1.0 - ((propertyCost - 200) / 400.0))); // $200 = 100%, $600 = 0%
+        return Math.random() < probability;
     }
 
     public boolean buyProperty(int propertyCost) {

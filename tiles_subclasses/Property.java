@@ -21,7 +21,7 @@ public class Property extends Tiles {
         super.executeAction(player);
         if (owner == null) {
             // If the property is not owned, ask the player if they want to buy it
-            if (player.decideToBuyProperty(cost)) {
+            if (player.decideToBuy(cost)) {
                 sellProperty(player); // Sell the property to the player
             }
         } else if (owner != player) {
