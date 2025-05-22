@@ -5,9 +5,9 @@ public class Player {
     private boolean inJail;
     private int position; // Player's current position on the board
 
-    public Player(String name, int initialBalance) {
+    public Player(String name) {
         this.name = name;
-        this.balance = initialBalance;
+        this.balance = 1500; // Starting balance
         this.inJail = false; // Player starts not in jail
         this.position = 0; // Player starts at the "Go" position
     } 

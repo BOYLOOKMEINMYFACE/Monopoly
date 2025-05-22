@@ -12,35 +12,52 @@ public class Game {
     private Dice dice2;
     private ArrayList<Player> players;
     private ArrayList<Tiles> board;
+    private int turnCount;
 
     private Jail jail;
 
     // Constructor
-    public Game(int numberOfPlayers) {
-
+    public Game(ArrayList<Player> players) {
+        this.players = players;
         Player.setBoardSize(40); // Set the board size for all players
 
-        this.players = new ArrayList<>();
-        if (numberOfPlayers < 2 || numberOfPlayers > 6) {
-            throw new IllegalArgumentException("Number of players must be between 2 and 6.");
-        }
-        for (int i = 0; i < numberOfPlayers; i++) {
-            players.add(new Player("P" + (i + 1), 1500));
-        }
 
         this.dice1 = new Dice(6);
         this.dice2 = new Dice(6);
 
         board = initializeBoard();
         linkJailTiles();
-        linkChancesTiles();
+        linkTiles();
 
+        turnCount = 0;
     }
 
-    private void linkChancesTiles() {
+    public Game(int numPlayers) {
+        this.players = new ArrayList<>();
+        for (int i = 0; i < numPlayers; i++) {
+            players.add(new Player("Player " + (i + 1)));
+        }
+        Player.setBoardSize(40); // Set the board size for all players
+
+        this.dice1 = new Dice(6);
+        this.dice2 = new Dice(6);
+
+        board = initializeBoard();
+        linkJailTiles();
+        linkTiles();
+
+        turnCount = 0;
+    }
+
+    // Link the boards to some tiles that require it
+    // (e.g., IncomeTax, Chances)
+    private void linkTiles() {
         for (Tiles tile : board) {
             if (tile instanceof Chances) {
                 ((Chances) tile).setBoard(board);
+            }
+            if (tile instanceof IncomeTax) {
+                ((IncomeTax) tile).setBoard(board);
             }
         }
     }
@@ -196,17 +213,24 @@ public class Game {
         currentTile.executeAction(player);
     }
 
-    private int count = 0;
-
     public boolean checkEnd() {
         for (Player player : players) {
             if (player.getBalance() <= 0) {
-                System.out.println(player + " is bankrupt!");
-                players.remove(player);
+                declareBankruptcy(player);
                 return players.size() == 1; // Game ends if only one player remains
             }
         }
-        return count++ > 25 || false; // Game continues
+        return turnCount++ > 100 || false;
+    }
+
+    public void declareBankruptcy(Player player) {
+        System.out.println(player + " is bankrupt!");
+        players.remove(player);
+        for (Tiles tile : board) {
+            if (tile instanceof Property property && property.getOwner() == player) {
+                property.setOwner(null);
+            }
+        }
     }
 
     public Player getWinner() {
