@@ -35,7 +35,7 @@ public class Game {
     public Game(int numPlayers) {
         this.players = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
-            players.add(new Player("Player " + (i + 1)));
+            players.add(new Player("P" + (i + 1)));
         }
         Player.setBoardSize(40); // Set the board size for all players
 
@@ -128,7 +128,6 @@ public class Game {
             playOneRound();
         }
         broadCastGameEnd(getWinner());
-
     }
 
     public void initialSetUp() {
@@ -143,7 +142,7 @@ public class Game {
             Tiles tile = board.get(i);
             StringBuilder playersOnTile = new StringBuilder();
             for (Player player : players) {
-                if (player.getPosition() == i) {
+                if (player.getPosition() == i && player.getBalance() > 0) {
                     playersOnTile.append("[").append(player.getName()).append("] ").append(" ");
                 }
             }
@@ -174,7 +173,7 @@ public class Game {
         System.out.println("New Round!");
         broadCastBalance();
         for (Player player : players) {
-            if (!player.getInJail()) {
+            if (!(player.getInJail()|| player.getBalance() <= 0)) {
                 takeTurn(player);
             } else {
                 jail.executeAction(player);
@@ -214,18 +213,19 @@ public class Game {
     }
 
     public boolean checkEnd() {
+        int playersInGame = 0;
         for (Player player : players) {
             if (player.getBalance() <= 0) {
                 declareBankruptcy(player);
-                return players.size() == 1; // Game ends if only one player remains
+            } else {
+                playersInGame++;
             }
         }
-        return turnCount++ > 100 || false;
+        return turnCount++ > 100 || playersInGame == 1;
     }
 
     public void declareBankruptcy(Player player) {
         System.out.println(player + " is bankrupt!");
-        players.remove(player);
         for (Tiles tile : board) {
             if (tile instanceof Property property && property.getOwner() == player) {
                 property.setOwner(null);
@@ -249,6 +249,16 @@ public class Game {
         System.out.println(
                 winner + " has won the game with a balance of $" +
                         winner.getBalance() + "!");
+    }
+
+    public void resetGame() {
+        for (Player player : players) {
+            player.resetPlayer();
+        }
+        for (Tiles tile : board) {
+            tile.resetTile();
+        }
+        turnCount = 0;
     }
 
     public void checkMonopoly() {

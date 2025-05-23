@@ -15,5 +15,10 @@ public class Railroad extends Property {
             .filter(railroad -> railroad.getOwner() == owner)
             .count();
         return 25 * numRailroadsOwned;
-    }   
+    }  
+    
+    public void resetTile(){
+        super.resetTile();
+        railroads.clear(); // Clear the list of railroads
+    }
 }

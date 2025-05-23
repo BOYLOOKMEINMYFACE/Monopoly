@@ -17,4 +17,9 @@ public class Tiles{
         // Default action for a tile, can be overridden by subclasses
         System.out.println(player.getName() + " landed on " + name);
     }
+
+    public void resetTile() {
+        // Default reset action for a tile, can be overridden by subclasses
+        System.out.println(name + " has been reset.");
+    }
 }

@@ -58,4 +58,10 @@ public class Jail extends Tiles {
     public void setJailTile(int jailTile) {
         this.jailTile = jailTile;
     }
+
+    public void resetTile() {
+        super.resetTile();
+        playersInJail.clear();
+        turnCount.clear();
+    }
 }

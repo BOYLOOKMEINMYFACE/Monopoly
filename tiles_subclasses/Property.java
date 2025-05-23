@@ -59,5 +59,4 @@ public class Property extends Tiles {
             System.out.println(player.getName() + " bought " + getName() + " for $" + cost);
         }
     }
-
 }

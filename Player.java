@@ -111,4 +111,11 @@ public class Player {
     public String toString() {
         return name;
     }
+
+    public void resetPlayer() {
+        balance = 1500; // Reset balance to starting amount
+        inJail = false; // Reset jail status
+        position = 0; // Reset position to "Go"
+        propertyOwned = 0; // Reset number of properties owned
+    }
 }

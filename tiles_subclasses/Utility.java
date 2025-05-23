@@ -23,4 +23,8 @@ public class Utility extends Property {
         return  rentMultiplier * totalDiceRoll;
     }
     
+    public void resetTile() {
+        super.resetTile();
+        utilities.clear(); // Clear the list of utilities
+    }
 }
