@@ -4,6 +4,10 @@ import java.util.Scanner;
 public class Monopoly {
     public static void main(String[] args) {
 
+        // Simple 4 player bots game
+        Game game = new Game(4);
+        game.play();
+
         // Game with human and 3 bots
         // ArrayList<Player> players = new ArrayList<>();
         // players.add(new Human("JZ"));
@@ -20,11 +24,6 @@ public class Monopoly {
         // }
 
         // game.play();
-
-
-        // Simple 4 player bots game
-        Game game = new Game(4);
-        game.play();
 
         // Play 10 games with the same players
         // ArrayList<Player> players = new ArrayList<>();
