@@ -30,9 +30,9 @@ public class Property extends Tiles {
         }
     }
 
-    public void collectRent(Player player){
+    public void collectRent(Player player) {
         player.payMoney(owner, getRent()); // Deduct rent from the player
-        if (player.getBalance() != -1){
+        if (player.getBalance() != -1) {
             owner.receiveMoney(getRent()); // Add rent to the owner's balance
         }
     }

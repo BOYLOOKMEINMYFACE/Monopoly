@@ -3,18 +3,33 @@ import java.util.Scanner;
 
 public class Monopoly {
     public static void main(String[] args) {
+
+        // Game with human and 3 bots
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Human("JZ"));
-        for(int i = 1; i <4; i++) {
+        for (int i = 1; i < 4; i++) {
             players.add(new Player("P" + i));
         }
         Game game = new Game(players);
+
+        // This is setting all properties to be owned by JZ
+        // for (Tiles tile : game.getBoard()) {
+        //     if (tile instanceof Property) {
+        //         ((Property) tile).setOwner(players.get(0)); // players.get(0) is "JZ"
+        //     }
+        // }
+
         game.play();
+
+
+        // Simple 4 player bots game
+        // Game game = new Game(4);
+        // game.play();
 
         // Play 10 games with the same players
         // ArrayList<Player> players = new ArrayList<>();
         // for (int i = 0; i < 4; i++) {
-        //     players.add(new Player("P" + (i + 1)));
+        // players.add(new Player("P" + (i + 1)));
         // }
         // playMultipleGames(players, 10);
 

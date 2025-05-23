@@ -8,7 +8,7 @@ public class RealEstate extends Property {
     private boolean isMonopoly; // Flag to check if the player owns all properties in the group
 
     public RealEstate(String name, int cost, int[] rents, int costOfHouse, int group) {
-        super(name, cost);  // Call the parent class constructor
+        super(name, cost); // Call the parent class constructor
         this.rents = rents;
         this.costOfHouse = costOfHouse; // Set the cost of building a house
         this.costOfHotel = costOfHouse * 4 + 150; // Set the cost of building a hotel
@@ -34,7 +34,7 @@ public class RealEstate extends Property {
         System.out.println("Current number of houses: " + numHouses);
         System.out.println("Cost of house: " + getCostOfHouse());
         // If the property is owned by the player, they can build houses
-        if (player.decideToBuy(getCost())) {
+        if (player.decideToBuy(getCostOfHouse())) {
             System.out.println(player.getName() + " is building a house on " + getName());
             buildHouse();
         }
@@ -54,7 +54,8 @@ public class RealEstate extends Property {
     }
 
     public int getRent() {
-        return (isMonopoly && numHouses == 0) ? rents[0] * 2 : rents[numHouses]; // Return the rent based on the number of houses
+        return (isMonopoly && numHouses == 0) ? rents[0] * 2 : rents[numHouses]; // Return the rent based on the number
+                                                                                 // of houses
     }
 
     public int getCostOfHouse() {

@@ -12,7 +12,7 @@ public class Player {
         this.inJail = false; // Player starts not in jail
         this.position = 0; // Player starts at the "Go" position
         this.propertyOwned = 0; // Number of properties owned
-    } 
+    }
 
     public boolean decideToBuy(int propertyCost) {
         // Logic to decide whether to buy a property
@@ -21,7 +21,8 @@ public class Player {
             return true;
         }
         // The lower the property cost, the higher the chance to buy
-        double probability = Math.max(0.1, Math.min(1.0, 1.0 - ((propertyCost - 200) / 400.0))); // $200 = 100%, $600 = 0%
+        double probability = Math.max(0.1, Math.min(1.0, 1.0 - ((propertyCost - 200) / 400.0))); // $200 = 100%, $600 =
+                                                                                                 // 0%
         return Math.random() < probability;
     }
 
@@ -34,7 +35,7 @@ public class Player {
             return false; // Not enough balance
         }
     }
-    
+
     public void buyHouse(int cost) {
         if (balance >= cost) {
             balance -= cost; // Deduct the cost of building a house
@@ -53,7 +54,7 @@ public class Player {
         }
 
     }
-    
+
     // Overloaded method to pay money without a receiver
     public void payMoney(int amount) {
         if (balance >= amount) {
@@ -81,7 +82,7 @@ public class Player {
     public String getName() {
         return name;
     }
-    
+
     public int getBalance() {
         return balance;
     }
@@ -93,15 +94,15 @@ public class Player {
     public int getPosition() {
         return position;
     }
-    
+
     public boolean move(int spaces) {
         boolean passedGo = position + spaces >= boardSize;
         position = (position + spaces) % boardSize; // Move the player forward on the board
         return passedGo;
     }
-    
+
     public void setPosition(int position) {
-        this.position = position; 
+        this.position = position;
     }
 
     public static void setBoardSize(int size) {

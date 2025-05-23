@@ -10,7 +10,7 @@ public class Human extends Player {
 
     @Override
     public boolean decideToBuy(int cost) {
-        System.out.println("Do you want to buy the property for $" + cost + "? (y/n)");
+        System.out.println("Do you want to buy for $" + cost + "? (y/n)");
         String response = scanner.nextLine();
         return response.equalsIgnoreCase("y");
     }

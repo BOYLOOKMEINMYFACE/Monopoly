@@ -22,7 +22,6 @@ public class Game {
         this.players = players;
         Player.setBoardSize(40); // Set the board size for all players
 
-
         this.dice1 = new Dice(6);
         this.dice2 = new Dice(6);
 
@@ -131,13 +130,13 @@ public class Game {
         broadCastGameEnd(getWinner());
     }
 
-    public void initialSetUp() {
+    private void initialSetUp() {
         System.out.println("Welcome to Monopoly!");
         System.out.println("Game initialized with " + players.size() + " players.");
         broadCastBoard();
     }
 
-    public void broadCastBoard() {
+    private void broadCastBoard() {
         System.out.println("Monopoly Board:");
         for (int i = 0; i < board.size(); i++) {
             Tiles tile = board.get(i);
@@ -157,7 +156,7 @@ public class Game {
         }
     }
 
-    public void broadCastBalance() {
+    private void broadCastBalance() {
         System.out.println("Player Balances:");
         for (Player player : players) {
             if (player.getBalance() < 0) {
@@ -169,34 +168,44 @@ public class Game {
         System.out.println("____________________________________________________________");
     }
 
-    public void playOneRound() {
+    private void playOneRound() {
         System.out.println("============================================================");
         System.out.println("New Round!");
         broadCastBalance();
+        allPlayersTakeTurn();
+        if (checkHuman()) {
+            System.out.println("Press Enter to continue...");
+            Scanner sc = new Scanner(System.in);
+            sc.nextLine();
+        }
+        broadCastBoard();
+    }
+
+    private boolean checkHuman() {
         for (Player player : players) {
-            if (player.getBalance() <= 0) {
-                System.out.println(player + " is bankrupt and cannot play this round.");
-                continue;
+            if (player instanceof Human) {
+                return true;
             }
-            if (!(player.getInJail())) {
-                takeTurn(player);
+        }
+        return false;
+    }
+
+    private void allPlayersTakeTurn() {
+        for (Player player : players) {
+            if (player.getBalance() > 0) {
+                if (!(player.getInJail())) {
+                    takeTurn(player);
+                } else {
+                    jail.executeAction(player);
+                }
             } else {
-                jail.executeAction(player);
+                System.out.println(player + " is bankrupt and cannot play this round.");
             }
             System.out.println("____________________________________________________________");
         }
-        for (Player player : players) {
-            if (player instanceof Human) {
-                System.out.println("Press Enter to continue...");
-                Scanner sc = new Scanner(System.in);
-                sc.nextLine();
-            }
-        }
-        broadCastBoard();
-
     }
 
-    public void takeTurn(Player player) {
+    private void takeTurn(Player player) {
         // roll the dices first
         int rollOne = dice1.roll();
         int rollTwo = dice2.roll();
@@ -224,7 +233,7 @@ public class Game {
         currentTile.executeAction(player);
     }
 
-    public boolean checkEnd() {
+    private boolean checkEnd() {
         int playersInGame = 0;
         for (Player player : players) {
             if (player.getBalance() <= 0) {
@@ -240,7 +249,7 @@ public class Game {
         return turnCount++ > 100 || playersInGame == 1;
     }
 
-    public void declareBankruptcy(Player player) {
+    private void declareBankruptcy(Player player) {
         System.out.println(player + " is bankrupt!");
         for (Tiles tile : board) {
             if (tile instanceof Property property && property.getOwner() == player) {
@@ -259,7 +268,7 @@ public class Game {
         return richest;
     }
 
-    public void broadCastGameEnd(Player winner) {
+    private void broadCastGameEnd(Player winner) {
         System.out.println("============================================================");
         System.out.println("Game Over!");
         System.out.println(
@@ -277,7 +286,7 @@ public class Game {
         turnCount = 0;
     }
 
-    public void checkMonopoly() {
+    private void checkMonopoly() {
         // Map from group number to list of RealEstate in that group
         Map<Integer, List<RealEstate>> groupMap = new HashMap<>();
         for (Tiles tile : board) {

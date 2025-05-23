@@ -1,4 +1,4 @@
-public class Tiles{
+public class Tiles {
     private String name;
 
     public Tiles(String name) {

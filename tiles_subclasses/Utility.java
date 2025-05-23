@@ -16,13 +16,13 @@ public class Utility extends Property {
     public int getRent() {
         Player owner = this.getOwner();
         int numUtilitiesOwned = (int) utilities.stream()
-            .filter(utility -> utility.getOwner() == owner)
-            .count();
+                .filter(utility -> utility.getOwner() == owner)
+                .count();
         int rentMultiplier = (numUtilitiesOwned == 1) ? 4 : 10;
         int totalDiceRoll = this.dice1.roll() + this.dice2.roll();
-        return  rentMultiplier * totalDiceRoll;
+        return rentMultiplier * totalDiceRoll;
     }
-    
+
     public void resetTile() {
         super.resetTile();
         utilities.clear(); // Clear the list of utilities

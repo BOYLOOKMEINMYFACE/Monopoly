@@ -14,9 +14,9 @@ public class Jail extends Tiles {
     public ArrayList<Player> getPlayersInJail() {
         return playersInJail;
     }
-    
+
     public void executeAction(Player player) {
-        if(player.getInJail()) {
+        if (player.getInJail()) {
             arrestedAction(player);
         } else {
             System.out.println(player.getName() + " is not in jail. He is passing by");
@@ -26,7 +26,7 @@ public class Jail extends Tiles {
     public void arrestedAction(Player player) {
         System.out.println(player.getName() + " is in jail and cannot take a turn.");
         int index = playersInJail.indexOf(player);
-        if(turnCount.get(index) < JAIL_TURN_LIMIT) {
+        if (turnCount.get(index) < JAIL_TURN_LIMIT) {
             turnCount.set(index, turnCount.get(index) + 1);
             System.out.println(player.getName() + " has been in jail for " + turnCount.get(index) + " turns.");
         } else {
@@ -42,7 +42,7 @@ public class Jail extends Tiles {
             player.setInJail(true);
         }
     }
-    
+
     public void releaseFromJail(Player player) {
         if (playersInJail.contains(player)) {
             turnCount.remove(playersInJail.indexOf(player));
