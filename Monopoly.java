@@ -8,20 +8,7 @@ public class Monopoly {
             players.add(new Player("P" + (i + 1)));
         }
 
-        int[] wins = new int[4];
-        for (int i = 0; i < 10; i++){
-            Game game = new Game(players);
-            game.play();
-            for (int j = 0; j < players.size(); j++) {
-                if (game.getWinner() == players.get(j)) {
-                    wins[j]++;
-                }
-            }
-            game.resetGame();
-        }
-        for (int i = 0; i < players.size(); i++) {
-            System.out.println(players.get(i).getName() + " won " + wins[i] + " times.");
-        }
+        playMultipleGames(players, 10); // Play 10 games with the same players
 
         // Scanner sc = new Scanner(System.in);
         // Game game = new Game(getPlayers(sc));
@@ -38,5 +25,22 @@ public class Monopoly {
             players.add(new Player(name));
         }
         return players;
+    }
+
+    public static void playMultipleGames(ArrayList<Player> players, int numGames) {
+        int[] wins = new int[players.size()];
+        for (int i = 0; i < numGames; i++) {
+            Game game = new Game(players);
+            game.play();
+            for (int j = 0; j < players.size(); j++) {
+                if (game.getWinner() == players.get(j)) {
+                    wins[j]++;
+                }
+            }
+            game.resetGame();
+        }
+        for (int i = 0; i < players.size(); i++) {
+            System.out.println(players.get(i).getName() + " won " + wins[i] + " times.");
+        }
     }
 }
