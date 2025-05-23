@@ -5,12 +5,12 @@ public class Monopoly {
     public static void main(String[] args) {
 
         // Game with human and 3 bots
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(new Human("JZ"));
-        for (int i = 1; i < 4; i++) {
-            players.add(new Player("P" + i));
-        }
-        Game game = new Game(players);
+        // ArrayList<Player> players = new ArrayList<>();
+        // players.add(new Human("JZ"));
+        // for (int i = 1; i < 4; i++) {
+        //     players.add(new Player("P" + i));
+        // }
+        // Game game = new Game(players);
 
         // This is setting all properties to be owned by JZ
         // for (Tiles tile : game.getBoard()) {
@@ -19,12 +19,12 @@ public class Monopoly {
         //     }
         // }
 
-        game.play();
+        // game.play();
 
 
         // Simple 4 player bots game
-        // Game game = new Game(4);
-        // game.play();
+        Game game = new Game(4);
+        game.play();
 
         // Play 10 games with the same players
         // ArrayList<Player> players = new ArrayList<>();
