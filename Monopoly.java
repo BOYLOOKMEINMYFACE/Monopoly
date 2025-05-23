@@ -4,11 +4,19 @@ import java.util.Scanner;
 public class Monopoly {
     public static void main(String[] args) {
         ArrayList<Player> players = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            players.add(new Player("P" + (i + 1)));
+        players.add(new Human("JZ"));
+        for(int i = 1; i <4; i++) {
+            players.add(new Player("P" + i));
         }
+        Game game = new Game(players);
+        game.play();
 
-        playMultipleGames(players, 10); // Play 10 games with the same players
+        // Play 10 games with the same players
+        // ArrayList<Player> players = new ArrayList<>();
+        // for (int i = 0; i < 4; i++) {
+        //     players.add(new Player("P" + (i + 1)));
+        // }
+        // playMultipleGames(players, 10);
 
         // Scanner sc = new Scanner(System.in);
         // Game game = new Game(getPlayers(sc));

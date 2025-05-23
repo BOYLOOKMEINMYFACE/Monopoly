@@ -5,6 +5,7 @@ import java.util.Map;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Game {
 
@@ -173,12 +174,23 @@ public class Game {
         System.out.println("New Round!");
         broadCastBalance();
         for (Player player : players) {
-            if (!(player.getInJail()|| player.getBalance() <= 0)) {
+            if (player.getBalance() <= 0) {
+                System.out.println(player + " is bankrupt and cannot play this round.");
+                continue;
+            }
+            if (!(player.getInJail())) {
                 takeTurn(player);
             } else {
                 jail.executeAction(player);
             }
             System.out.println("____________________________________________________________");
+        }
+        for (Player player : players) {
+            if (player instanceof Human) {
+                System.out.println("Press Enter to continue...");
+                Scanner sc = new Scanner(System.in);
+                sc.nextLine();
+            }
         }
         broadCastBoard();
 
@@ -217,6 +229,10 @@ public class Game {
         for (Player player : players) {
             if (player.getBalance() <= 0) {
                 declareBankruptcy(player);
+                if (player instanceof Human) {
+                    System.out.println("You Have Lost!");
+                    return true;
+                }
             } else {
                 playersInGame++;
             }
